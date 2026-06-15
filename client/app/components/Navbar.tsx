@@ -18,13 +18,10 @@ import {
 
   useTheme,
 
-} from "next-themes";
+} from "../providers";
 
-import {
-
-  useState,
-
-} from "react";
+import { useState } from "react";
+import { useCart } from "@/app/context/CartContext";
 
 export default function Navbar() {
 
@@ -61,6 +58,8 @@ export default function Navbar() {
 
   ];
 
+  const { totalItems } = useCart();
+
   return (
 
     <motion.nav
@@ -84,7 +83,7 @@ export default function Navbar() {
 
       <div className="max-w-7xl mx-auto px-6 pt-5">
 
-        <div className="glass rounded-[30px] px-7 h-24 flex items-center justify-between">
+        <div className="rounded-[30px] px-7 h-24 flex items-center justify-between bg-white/90 backdrop-blur-xl border-b border-[#E8DDCC] shadow-sm">
 
           {/* LOGO */}
 
@@ -108,13 +107,13 @@ export default function Navbar() {
 
             <div>
 
-              <h1 className="text-3xl font-black gold-text">
+              <h1 className="text-3xl font-black text-[var(--text)]">
 
                 Sham Tex
 
               </h1>
 
-              <p className="text-zinc-400 text-sm">
+              <p className="text-[var(--muted)] text-sm">
 
                 Luxury Home Collection
 
@@ -136,7 +135,7 @@ export default function Navbar() {
 
                 href={link.href}
 
-                className="text-white hover:text-[#C8A96B] transition-all text-lg font-semibold"
+                className="text-[var(--text)] hover:text-[var(--primary-dark)] transition-all text-lg font-semibold"
               >
 
                 {link.name}
@@ -163,7 +162,7 @@ export default function Navbar() {
                 )
               }
 
-              className="w-14 h-14 rounded-2xl glass flex items-center justify-center text-white hover:scale-110 transition-all"
+              className="w-14 h-14 rounded-2xl glass flex items-center justify-center text-[var(--text)] hover:scale-110 transition-all"
             >
 
               <Moon />
@@ -178,11 +177,9 @@ export default function Navbar() {
 
               <ShoppingBag />
 
-              <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-black text-white text-sm flex items-center justify-center">
-
-                0
-
-              </span>
+              {totalItems > 0 && (
+                <span className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[var(--primary)] text-white text-xs flex items-center justify-center">{totalItems}</span>
+              )}
 
             </button>
 

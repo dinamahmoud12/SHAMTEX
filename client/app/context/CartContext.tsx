@@ -10,51 +10,34 @@ import {
 import toast from "react-hot-toast";
 
 interface Product {
-
   _id: string;
-
   title: string;
-
   price: number;
-
   finalPrice?: number;
-
   images: string[];
-
+  size?: string;
   quantity?: number;
-
 }
 
 interface CartContextType {
-
   cartItems: Product[];
-
-  addToCart: (
-    product: Product
-  ) => void;
-
-  removeFromCart: (
-    id: string
-  ) => void;
-
-  increaseQty: (
-    id: string
-  ) => void;
-
-  decreaseQty: (
-    id: string
-  ) => void;
-
+  addToCart: (product: Product) => void;
+  removeFromCart: (id: string, size?: string) => void;
+  increaseQty: (id: string, size?: string) => void;
+  decreaseQty: (id: string, size?: string) => void;
   totalPrice: number;
-
   totalItems: number;
-
 }
 
 const CartContext =
   createContext<CartContextType | null>(
     null
   );
+
+const getItemKey = (product: {
+  _id: string;
+  size?: string;
+}) => `${product._id}-${product.size || "default"}`;
 
 export default function CartProvider({
 
@@ -103,138 +86,99 @@ export default function CartProvider({
   const addToCart = (
     product: Product
   ) => {
-
-    const existing =
-      cartItems.find(
-        (item) =>
-          item._id ===
-          product._id
-      );
+    const itemKey = getItemKey(product);
+    const existing = cartItems.find(
+      (item) =>
+        getItemKey(item) === itemKey
+    );
 
     if (existing) {
-
       setCartItems(
-
         cartItems.map((item) =>
-
-          item._id ===
-          product._id
-
+          getItemKey(item) === itemKey
             ? {
-
                 ...item,
-
                 quantity:
                   (item.quantity || 1) + 1,
               }
-
             : item
-
         )
-
       );
-
     } else {
-
       setCartItems([
-
         ...cartItems,
-
         {
           ...product,
           quantity: 1,
         },
-
       ]);
-
     }
 
-    toast.success(
-      "تمت إضافة المنتج للسلة"
-    );
-
+    toast.success("تمت إضافة المنتج للسلة");
   };
 
   /* REMOVE */
 
   const removeFromCart = (
-    id: string
+    id: string,
+    size?: string
   ) => {
+    const key = getItemKey({ _id: id, size });
 
     setCartItems(
-
       cartItems.filter(
         (item) =>
-          item._id !== id
+          getItemKey(item) !== key
       )
-
     );
 
-    toast.success(
-      "تم حذف المنتج"
-    );
-
+    toast.success("تم حذف المنتج");
   };
 
   /* INCREASE */
 
   const increaseQty = (
-    id: string
+    id: string,
+    size?: string
   ) => {
+    const key = getItemKey({ _id: id, size });
 
     setCartItems(
-
       cartItems.map((item) =>
-
-        item._id === id
-
+        getItemKey(item) === key
           ? {
-
               ...item,
-
               quantity:
                 (item.quantity || 1) + 1,
             }
-
           : item
-
       )
-
     );
-
   };
 
   /* DECREASE */
 
   const decreaseQty = (
-    id: string
+    id: string,
+    size?: string
   ) => {
+    const key = getItemKey({ _id: id, size });
 
     setCartItems(
-
       cartItems.map((item) =>
-
-        item._id === id
-
+        getItemKey(item) === key
           ? {
-
               ...item,
-
               quantity:
-                item.quantity! > 1
-
-                  ? item.quantity! - 1
-
+                item.quantity && item.quantity > 1
+                  ? item.quantity - 1
                   : 1,
             }
-
           : item
-
       )
-
     );
-
   };
+
 
   /* TOTALS */
 

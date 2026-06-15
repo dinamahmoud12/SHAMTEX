@@ -27,7 +27,7 @@ export default function ProductDetails() {
     try {
 
       const res = await fetch(
-        `http://localhost:5000/api/products/${params.id}`
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/products/${params.id}`
       );
 
       const data = await res.json();
@@ -97,7 +97,7 @@ export default function ProductDetails() {
 
           <div className="flex items-center gap-5 mb-8">
 
-            <h2 className="text-5xl text-[#C8A96B] font-bold">
+            <h2 className="text-5xl text-[#D4B06A] font-bold">
 
               {product.finalPrice} EGP
 

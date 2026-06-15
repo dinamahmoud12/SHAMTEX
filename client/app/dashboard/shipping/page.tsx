@@ -55,7 +55,7 @@ export default function ShippingPage() {
     for (const gov of governorates) {
 
       await fetch(
-        "http://localhost:5000/api/shipping",
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/shipping`,
         {
           method: "POST",
 
@@ -96,7 +96,7 @@ export default function ShippingPage() {
     try {
 
       const res = await fetch(
-        "http://localhost:5000/api/shipping"
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/shipping`
       );
 
       const data = await res.json();
@@ -118,7 +118,7 @@ export default function ShippingPage() {
     e.preventDefault();
 
     const res = await fetch(
-      "http://localhost:5000/api/shipping",
+      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/shipping`,
       {
         method: "POST",
 
@@ -157,7 +157,7 @@ export default function ShippingPage() {
     ) => {
 
       await fetch(
-        `http://localhost:5000/api/shipping/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/shipping/${id}`,
         {
           method: "PUT",
 
@@ -181,11 +181,11 @@ export default function ShippingPage() {
 
   return (
 
-    <section className="bg-black min-h-screen py-20 px-6">
+    <section className="bg-[var(--bg)] min-h-screen py-20 px-6 text-[var(--text)]">
 
       <div className="max-w-6xl mx-auto">
 
-        <h1 className="text-5xl font-bold text-[#C8A96B] mb-10">
+        <h1 className="text-5xl font-black text-[var(--primary)] mb-10">
 
           أسعار الشحن
 
@@ -193,7 +193,7 @@ export default function ShippingPage() {
 
         <button
           onClick={addAllGovernorates}
-          className="bg-[#C8A96B] text-black px-8 py-4 rounded-2xl font-bold text-xl mb-10"
+          className="gold-btn px-8 py-4 rounded-2xl font-bold text-xl mb-10"
         >
 
           إضافة كل المحافظات
@@ -204,7 +204,7 @@ export default function ShippingPage() {
 
         <form
           onSubmit={addShipping}
-          className="bg-zinc-900 p-8 rounded-3xl mb-10 grid md:grid-cols-3 gap-5"
+          className="glass-card p-8 rounded-3xl mb-10 grid md:grid-cols-3 gap-5"
         >
 
           <select
@@ -214,7 +214,7 @@ export default function ShippingPage() {
                 e.target.value
               )
             }
-            className="bg-black p-5 rounded-2xl text-white"
+            className="bg-white p-5 rounded-2xl text-[var(--text)] border border-[#E8DDCC]"
           >
 
             <option value="">
@@ -241,11 +241,11 @@ export default function ShippingPage() {
             onChange={(e) =>
               setPrice(e.target.value)
             }
-            className="bg-black p-5 rounded-2xl text-white"
+            className="bg-white p-5 rounded-2xl text-[var(--text)] border border-[#E8DDCC]"
           />
 
           <button
-            className="bg-[#C8A96B] text-black rounded-2xl font-bold text-xl"
+            className="gold-btn rounded-2xl font-bold text-xl"
           >
             إضافة
           </button>
@@ -260,18 +260,18 @@ export default function ShippingPage() {
 
             <div
               key={item._id}
-              className="bg-zinc-900 p-6 rounded-3xl flex items-center justify-between"
+              className="glass-card p-6 rounded-3xl flex items-center justify-between border border-[#E8DDCC]"
             >
 
               <div>
 
-                <h2 className="text-3xl text-white font-bold mb-2">
+                <h2 className="text-3xl text-[var(--text)] font-bold mb-2">
 
                   {item.governorate}
 
                 </h2>
 
-                <p className="text-[#C8A96B] text-2xl">
+                <p className="text-[var(--primary)] text-2xl">
 
                   {item.price} EGP
 
@@ -288,7 +288,7 @@ export default function ShippingPage() {
                     Number(e.target.value)
                   )
                 }
-                className="bg-black text-white p-4 rounded-2xl w-40"
+                className="bg-white text-[var(--text)] p-4 rounded-2xl w-40 border border-[#E8DDCC]"
               />
 
             </div>

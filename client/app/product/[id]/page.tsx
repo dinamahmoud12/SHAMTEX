@@ -1,705 +1,201 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  useParams,
-} from "next/navigation";
-
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
-
-import {
-  motion,
-} from "framer-motion";
-
-import {
-  ShoppingBag,
-  Star,
-  Truck,
-  ShieldCheck,
-  Heart,
-  Check,
-  Sparkles,
-  ArrowLeft,
-} from "lucide-react";
-
 import { useCart } from "@/app/context/CartContext";
 
 interface Product {
-
   _id: string;
-
   title: string;
-
   price: number;
-
-  finalPrice?: number;
-
-  oldPrice?: number;
-
   description: string;
-
   images: string[];
-
   category: string;
-
+  discount?: number;
+  finalPrice?: number;
 }
 
 export default function ProductPage() {
-
   const params = useParams();
+  console.log("PARAMS:", params);
+  console.log("ID:", params?.id);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const { addToCart } = useCart();
 
-  const [product,
-    setProduct] =
-    useState<Product | null>(
-      null
-    );
-
-  const [products,
-    setProducts] =
-    useState<Product[]>([]);
-
-  const [mainImage,
-    setMainImage] =
-    useState("");
-
-  const [selectedSize,
-    setSelectedSize] =
-    useState("Large");
-
-  const { addToCart } =
-    useCart();
+  const baseURL =
+    process.env.NEXT_PUBLIC_API_URL ||
+    "http://localhost:5000";
 
   useEffect(() => {
-
-    fetch(
-      `http://localhost:5000/api/products/${params.id}`
-    )
-
-      .then((res) =>
-        res.json()
-      )
-
-      .then((data) => {
-
-        setProduct(data);
-
-        setMainImage(
-          data.images?.[0]
+    const loadProduct = async () => {
+      try {
+        const res = await fetch(
+          `${baseURL}/api/products/${params.id}`
         );
+        const data = await res.json();
+        console.log(data);
+        console.log("Product Price:", data.price);
+        setProduct(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-        fetch(
-          "http://localhost:5000/api/products"
-        )
+    if (params?.id) {
+      loadProduct();
+    }
+  }, [params?.id, baseURL]);
 
-          .then((res) =>
-            res.json()
+  useEffect(() => {
+    if (product?.images?.length) {
+      setSelectedImage(0);
+    }
+  }, [product]);
+
+  useEffect(() => {
+    if (!product?.category) return;
+
+    const loadRelated = async () => {
+      try {
+        const res = await fetch(`${baseURL}/api/products`);
+        const data: Product[] = await res.json();
+        setRelatedProducts(
+          data.filter(
+            (item) =>
+              item.category === product.category && item._id !== product._id
           )
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-          .then((allProducts) => {
+    loadRelated();
+  }, [product?.category, product?._id, baseURL]);
 
-            const related =
-              allProducts.filter(
-                (item: Product) =>
-                  item.category === data.category &&
-                  item._id !== data._id
-              );
-
-            setProducts(related);
-
-          });
-
-      });
-
-  }, []);
+  useEffect(() => {
+    if (product) {
+      console.log("PRODUCT DATA:", product);
+      console.log("IMAGES:", product.images);
+      console.log("DESCRIPTION:", product.description);
+      console.log("KEYS:", Object.keys(product));
+    }
+  }, [product]);
 
   if (!product) {
-
     return (
-
-      <div className="min-h-screen flex items-center justify-center bg-black">
-
-        <div className="text-4xl font-black text-[#C8A96B] animate-pulse">
-
-          جاري تحميل المنتج...
-
-        </div>
-
-      </div>
-
+      <section className="min-h-screen bg-[var(--bg)] text-[var(--text)] flex items-center justify-center">
+        <div className="text-2xl font-black text-[var(--primary)]">جاري التحميل...</div>
+      </section>
     );
-
   }
-
   return (
-
-    <section className="relative min-h-screen py-32 px-6 overflow-hidden">
-
-      {/* BACKGROUND */}
-
-      <div className="absolute inset-0 -z-10">
-
-        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-[#C8A96B]/15 blur-[160px] rounded-full" />
-
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-white/5 blur-[160px] rounded-full" />
-
-      </div>
-
-      {/* MAIN */}
-
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20">
-
-        {/* IMAGES */}
-
-        <motion.div
-
-          initial={{
-            opacity: 0,
-            x: -80,
-          }}
-
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-
-          transition={{
-            duration: 0.8,
-          }}
-        >
-
-          <div
-            className="
-              relative
-              rounded-[40px]
-              overflow-hidden
-              border
-              border-white/10
-              bg-white/[0.03]
-              backdrop-blur-2xl
-            "
-          >
-
-            <motion.img
-
-              key={mainImage}
-
-              initial={{
-                opacity: 0,
-                scale: 1.1,
-              }}
-
-              animate={{
-                opacity: 1,
-                scale: 1,
-              }}
-
-              transition={{
-                duration: 0.5,
-              }}
-
-              src={
-                mainImage ||
-                "/hero-1.webp"
-              }
-
-              className="
-                w-full
-                h-[750px]
-                object-cover
-                hover:scale-110
-                transition-all
-                duration-1000
-              "
-            />
-
-            <div className="absolute top-6 right-6">
-
-              <div className="bg-[#C8A96B] text-black px-5 py-3 rounded-full font-black">
-
-                الأكثر مبيعًا
-
-              </div>
-
+    <section dir="rtl" className="min-h-screen bg-[var(--bg)] py-12">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
+          {/* الصور */}
+          <div>
+            <div className="bg-white rounded-[40px] overflow-hidden shadow-xl border border-[#E8DDCC]">
+              <img
+                src={product.images?.[selectedImage] || product.images?.[0] || "/hero-1.webp"}
+                alt={product.title}
+                className="w-full h-[650px] object-cover hover:scale-105 duration-500"
+              />
             </div>
-
-            <button
-              className="
-                absolute
-                top-6
-                left-6
-                w-14
-                h-14
-                rounded-2xl
-                bg-black/30
-                backdrop-blur-xl
-                border
-                border-white/10
-                flex
-                items-center
-                justify-center
-                text-white
-                hover:bg-[#C8A96B]
-                hover:text-black
-                transition-all
-              "
-            >
-
-              <Heart size={24} />
-
-            </button>
-
-          </div>
-
-          {/* THUMBNAILS */}
-
-          <div className="flex gap-4 mt-6 overflow-auto pb-2">
-
-            {product.images?.map(
-              (img, index) => (
-
-                <motion.img
-
-                  whileHover={{
-                    scale: 1.06,
-                  }}
-
+            <div className="grid grid-cols-4 gap-4 mt-5">
+              {product.images?.slice(0, 4).map((img, index) => (
+                <div
                   key={index}
-
-                  src={img}
-
-                  onClick={() =>
-                    setMainImage(img)
-                  }
-
-                  className={`
-
-                    w-28
-                    h-28
-                    object-cover
-                    rounded-3xl
-                    cursor-pointer
-                    transition-all
-                    duration-300
-                    border-2
-
-                    ${
-                      mainImage === img
-
-                        ? "border-[#C8A96B] scale-105"
-
-                        : "border-white/10 opacity-70 hover:opacity-100"
-                    }
-
-                  `}
-                />
-
-              )
-            )}
-
-          </div>
-
-        </motion.div>
-
-        {/* DETAILS */}
-
-        <motion.div
-
-          initial={{
-            opacity: 0,
-            x: 80,
-          }}
-
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-
-          transition={{
-            duration: 0.8,
-          }}
-
-          className="flex flex-col justify-center"
-        >
-
-          <div className="mb-6">
-
-            <span
-              className="
-                inline-flex
-                items-center
-                gap-2
-                px-5
-                py-2
-                rounded-full
-                bg-[#C8A96B]/10
-                border
-                border-[#C8A96B]/20
-                text-[#C8A96B]
-                font-bold
-              "
-            >
-
-              <Sparkles size={18} />
-
-              {product.category}
-
-            </span>
-
-          </div>
-
-          <h1 className="text-5xl lg:text-7xl font-black text-white leading-tight mb-8">
-
-            {product.title}
-
-          </h1>
-
-          <div className="flex items-center gap-2 mb-8">
-
-            {[1,2,3,4,5].map((i) => (
-
-              <Star
-                key={i}
-                className="text-[#C8A96B] fill-[#C8A96B]"
-                size={22}
-              />
-
-            ))}
-
-            <span className="text-zinc-400 mr-3 text-lg">
-
-              تقييم 4.9
-
-            </span>
-
-          </div>
-
-          <div className="flex items-center gap-5 mb-10">
-
-            <p className="text-[#C8A96B] text-5xl font-black">
-
-              {product.finalPrice ||
-                product.price} EGP
-
-            </p>
-
-            {product.oldPrice && (
-
-              <p className="text-zinc-500 line-through text-3xl">
-
-                {product.oldPrice} EGP
-
-              </p>
-
-            )}
-
-          </div>
-
-          <p className="text-zinc-300 text-xl leading-loose mb-12">
-
-            {product.description}
-
-          </p>
-
-          {/* SIZES */}
-
-          <div className="mb-12">
-
-            <h3 className="text-white text-2xl font-black mb-5">
-
-              اختر المقاس
-
-            </h3>
-
-            <div className="flex flex-wrap gap-4">
-
-              {["Small", "Medium", "Large", "XL"].map((size) => (
-
-                <button
-
-                  key={size}
-
-                  onClick={() =>
-                    setSelectedSize(size)
-                  }
-
-                  className={`
-
-                    px-7
-                    h-14
-                    rounded-2xl
-                    border
-                    transition-all
-                    duration-300
-                    font-bold
-
-                    ${
-                      selectedSize === size
-
-                        ? "bg-[#C8A96B] text-black border-[#C8A96B] scale-105"
-
-                        : "border-white/10 text-white hover:border-[#C8A96B]"
-                    }
-
-                  `}
+                  className={`bg-white rounded-3xl overflow-hidden border border-[#E8DDCC] cursor-pointer hover:scale-105 duration-300 ${selectedImage === index ? 'ring-2 ring-[var(--primary)]' : ''}`}
+                  onClick={() => setSelectedImage(index)}
                 >
-
-                  {size}
-
-                </button>
-
+                  <img src={img} alt="" className="w-full h-28 object-cover" />
+                </div>
               ))}
-
             </div>
-
           </div>
 
-          {/* FEATURES */}
-
-          <div className="grid sm:grid-cols-3 gap-5 mb-14">
-
-            <div className="glass p-6 rounded-3xl text-center">
-
-              <Truck
-                className="mx-auto mb-4 text-[#C8A96B]"
-                size={34}
-              />
-
-              <p className="text-white font-bold">
-
-                شحن سريع
-
-              </p>
-
+          {/* البيانات */}
+          <div className="space-y-6">
+            <span className="inline-flex bg-[#EFE7DA] text-[#B08B47] px-5 py-2 rounded-full font-semibold">
+              الأكثر مبيعاً
+            </span>
+            <h1 className="text-5xl font-black text-[var(--text)]">{product.title}</h1>
+            <div className="flex items-center gap-3">
+              <span className="text-2xl text-yellow-500">⭐⭐⭐⭐⭐</span>
+              <span className="text-[var(--muted)]">152 تقييم</span>
             </div>
 
-            <div className="glass p-6 rounded-3xl text-center">
-
-              <ShieldCheck
-                className="mx-auto mb-4 text-[#C8A96B]"
-                size={34}
-              />
-
-              <p className="text-white font-bold">
-
-                جودة مضمونة
-
-              </p>
-
+            {/* السعر */}
+            <div className="bg-white rounded-[35px] p-8 shadow-lg border border-[#E8DDCC]">
+              {(product.discount ?? 0) > 0 && (
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="bg-[#EFE7DA] text-[#B08B47] px-4 py-2 rounded-full font-bold">
+                    {`وفر %${product.discount ?? 0}`}
+                  </span>
+                </div>
+              )}
+              <h2 className="text-6xl font-black text-[var(--primary)]">{product.finalPrice || product.price} EGP</h2>
+              {(product.discount ?? 0) > 0 && (
+                <p className="line-through text-[var(--muted)] mt-2">{product.price} EGP</p>
+              )}
             </div>
 
-            <div className="glass p-6 rounded-3xl text-center">
-
-              <Check
-                className="mx-auto mb-4 text-[#C8A96B]"
-                size={34}
-              />
-
-              <p className="text-white font-bold">
-
-                خامات فاخرة
-
-              </p>
-
+            {/* وصف */}
+            <div className="bg-white rounded-[35px] p-8 shadow-lg border border-[#E8DDCC]">
+              <h3 className="text-2xl font-black mb-5">وصف المنتج</h3>
+              <p className="leading-10 text-lg text-[var(--muted)] whitespace-pre-line">{product.description}</p>
             </div>
 
-          </div>
+            {/* المميزات */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded-3xl p-5 shadow border border-[#E8DDCC]">✓ خامات فندقية</div>
+              <div className="bg-white rounded-3xl p-5 shadow border border-[#E8DDCC]">✓ ألوان ثابتة</div>
+              <div className="bg-white rounded-3xl p-5 shadow border border-[#E8DDCC]">✓ سهل الغسيل</div>
+              <div className="bg-white rounded-3xl p-5 shadow border border-[#E8DDCC]">✓ شحن سريع</div>
+            </div>
 
-          {/* BUTTONS */}
-
-          <div className="flex flex-col sm:flex-row gap-5">
-
-            <motion.a
-
-              whileHover={{
-                scale: 1.03,
-              }}
-
-              whileTap={{
-                scale: 0.97,
-              }}
-
-              href={`https://wa.me/201080691028?text=أريد طلب ${product.title}`}
-
-              target="_blank"
-
-              className="
-                flex-1
-                h-16
-                rounded-3xl
-                bg-[#C8A96B]
-                text-black
-                text-2xl
-                font-black
-                flex
-                items-center
-                justify-center
-                gap-3
-              "
-            >
-
-              اطلب الآن
-
-              <ShoppingBag size={24} />
-
-            </motion.a>
-
-            <motion.button
-
-              whileHover={{
-                scale: 1.03,
-              }}
-
-              whileTap={{
-                scale: 0.97,
-              }}
-
-              onClick={() =>
-                addToCart(product)
-              }
-
-              className="
-                flex-1
-                h-16
-                rounded-3xl
-                border
-                border-white/10
-                bg-white/5
-                backdrop-blur-xl
-                text-white
-                text-2xl
-                font-bold
-              "
-            >
-
-              إضافة للسلة
-
-            </motion.button>
-
-          </div>
-
-        </motion.div>
-
-      </div>
-
-      {/* RELATED PRODUCTS */}
-
-      {products.length > 0 && (
-
-        <div className="max-w-7xl mx-auto mt-40">
-
-          <div className="text-center mb-20">
-
-            <p className="text-[#C8A96B] text-xl mb-4 font-semibold">
-
-              منتجات مشابهة
-
-            </p>
-
-            <h2 className="text-6xl font-black text-white mb-6">
-
-              قد يعجبك أيضًا
-
-            </h2>
-
-          </div>
-
-          <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
-
-            {products.slice(0,4).map((item, index) => (
-
-              <motion.div
-
-                key={item._id}
-
-                initial={{
-                  opacity: 0,
-                  y: 80,
-                }}
-
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                }}
-
-                transition={{
-                  delay: index * 0.1,
-                }}
-
-                viewport={{
-                  once: true,
-                }}
-
-                className="group glass rounded-[35px] overflow-hidden hover-card"
+            {/* أزرار */}
+            <div className="flex gap-4">
+              <button className="flex-1 py-5 rounded-3xl bg-[var(--primary)] text-white font-bold text-lg hover:bg-[var(--primary-dark)] duration-300">اطلب الآن</button>
+              <button
+                onClick={() =>
+                  addToCart({
+                    _id: product._id,
+                    title: product.title,
+                    price: product.price,
+                    finalPrice: product.finalPrice,
+                    images: product.images,
+                  })
+                }
+                className="gold-btn px-8 py-4 rounded-3xl"
               >
-
-                <div className="relative overflow-hidden">
-
-                  <img
-
-                    src={item.images?.[0]}
-
-                    className="w-full h-[420px] object-cover group-hover:scale-110 transition-all duration-700"
-                  />
-
-                </div>
-
-                <div className="p-6">
-
-                  <h3 className="text-white text-2xl font-black mb-4 line-clamp-1">
-
-                    {item.title}
-
-                  </h3>
-
-                  <p className="text-[#C8A96B] text-3xl font-black mb-6">
-
-                    {item.price} EGP
-
-                  </p>
-
-                  <Link
-
-                    href={`/product/${item._id}`}
-
-                    className="
-                      h-14
-                      rounded-2xl
-                      bg-[#C8A96B]
-                      text-black
-                      font-black
-                      flex
-                      items-center
-                      justify-center
-                      gap-3
-                      hover:scale-105
-                      transition-all
-                    "
-                  >
-
-                    عرض المنتج
-
-                    <ArrowLeft size={20} />
-
-                  </Link>
-
-                </div>
-
-              </motion.div>
-
-            ))}
-
+                إضافة للسلة
+              </button>
+            </div>
           </div>
-
         </div>
 
-      )}
-
+        {/* منتجات مشابهة */}
+        <section className="mt-24">
+          <h2 className="text-4xl font-black mb-10">منتجات مشابهة</h2>
+          <div className="grid md:grid-cols-4 gap-6">
+            {relatedProducts.map((item) => (
+              <Link key={item._id} href={`/product/${item._id}`} className="bg-white rounded-[30px] overflow-hidden shadow-lg border border-[#E8DDCC]">
+                <img src={item.images?.[0]} alt={item.title} className="w-full h-64 object-cover" />
+                <div className="p-5">
+                  <h3 className="font-bold mb-3">{item.title}</h3>
+                  <p className="text-[var(--primary)] font-black text-xl">{item.price} EGP</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
     </section>
-
   );
-
 }

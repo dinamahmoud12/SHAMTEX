@@ -25,7 +25,7 @@ export default function Footer() {
 
       {/* BG */}
 
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#C8A96B]/10 blur-[140px] rounded-full" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#D4B06A]/10 blur-[140px] rounded-full" />
 
       <div className="max-w-7xl mx-auto relative z-10">
 
@@ -54,7 +54,7 @@ export default function Footer() {
 
             <div>
 
-              <h2 className="text-5xl font-black text-[#C8A96B] mb-6">
+              <h2 className="text-5xl font-black text-[#D4B06A] mb-6">
 
                 Sham Tex
 
@@ -84,7 +84,7 @@ export default function Footer() {
 
                 <a
                   href="#"
-                  className="block text-zinc-400 hover:text-[#C8A96B] transition-all"
+                  className="block text-zinc-400 hover:text-[#D4B06A] transition-all"
                 >
 
                   الرئيسية
@@ -93,7 +93,7 @@ export default function Footer() {
 
                 <a
                   href="#products"
-                  className="block text-zinc-400 hover:text-[#C8A96B] transition-all"
+                  className="block text-zinc-400 hover:text-[#D4B06A] transition-all"
                 >
 
                   المنتجات
@@ -102,7 +102,7 @@ export default function Footer() {
 
                 <a
                   href="#categories"
-                  className="block text-zinc-400 hover:text-[#C8A96B] transition-all"
+                  className="block text-zinc-400 hover:text-[#D4B06A] transition-all"
                 >
 
                   الأقسام

@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 
-import {
-  Cairo,
-  Poppins,
-  Cinzel,
-} from "next/font/google";
+import { Tajawal } from "next/font/google";
 
 import "./globals.css";
 
@@ -13,33 +9,11 @@ import Providers from "./providers";
 import { Toaster } from "react-hot-toast";
 
 import CartProvider from "./context/CartContext";
+import WishlistProvider from "./context/WishlistContext";
 
-const cairo = Cairo({
+const tajawal = Tajawal({
   subsets: ["arabic"],
-  variable: "--font-cairo",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: [
-    "300",
-    "400",
-    "500",
-    "600",
-    "700",
-  ],
-  variable: "--font-poppins",
-});
-
-const cinzel = Cinzel({
-  subsets: ["latin"],
-  weight: [
-    "400",
-    "600",
-    "700",
-    "900",
-  ],
-  variable: "--font-cinzel",
+  weight: ["400", "500", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -52,34 +26,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
-
     <html
       lang="ar"
       dir="rtl"
+      className={tajawal.className}
       suppressHydrationWarning
-      className={`${cairo.variable} ${poppins.variable} ${cinzel.variable}`}
     >
-
-      <body className="bg-black text-white overflow-x-hidden">
-
+      <body className="overflow-x-hidden">
         <Providers>
-
           <CartProvider>
-
-            <Toaster position="top-center" />
-
-            {children}
-
+            <WishlistProvider>
+              <Toaster position="top-center" />
+              {children}
+            </WishlistProvider>
           </CartProvider>
-
         </Providers>
-
       </body>
-
     </html>
-
   );
-
 }

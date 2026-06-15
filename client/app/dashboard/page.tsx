@@ -36,7 +36,7 @@ export default function DashboardPage() {
 
       const productsRes =
         await fetch(
-          "http://localhost:5000/api/products"
+          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/products`
         );
 
       const productsData =
@@ -48,7 +48,7 @@ export default function DashboardPage() {
 
       const ordersRes =
         await fetch(
-          "http://localhost:5000/api/orders"
+          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/orders`
         );
 
       const ordersData =
@@ -142,13 +142,13 @@ export default function DashboardPage() {
 
         <div className="mb-12">
 
-          <h1 className="text-6xl font-bold text-[#C8A96B] mb-4">
+          <h1 className="text-6xl font-black text-[var(--text)] mb-4">
 
             لوحة التحكم
 
           </h1>
 
-          <p className="text-zinc-400 text-xl">
+          <p className="text-[var(--muted)] text-xl">
 
             متابعة المتجر والإحصائيات والطلبات
 
@@ -175,15 +175,15 @@ export default function DashboardPage() {
 
           {/* PRODUCTS */}
 
-          <div className="glass hover-card rounded-3xl p-8 border border-white/10">
+          <div className="bg-white border border-[#E8DDCC] rounded-3xl shadow-lg hover:-translate-y-1 transition-all p-8">
 
-            <p className="text-zinc-400 mb-4">
+            <p className="text-[var(--muted)] mb-4">
 
               المنتجات
 
             </p>
 
-            <h2 className="text-white text-5xl font-bold">
+            <h2 className="text-[var(--text)] text-5xl font-black">
 
               {products.length}
 
@@ -193,15 +193,15 @@ export default function DashboardPage() {
 
           {/* ORDERS */}
 
-          <div className="glass hover-card rounded-3xl p-8 border border-white/10">
+          <div className="bg-white border border-[#E8DDCC] rounded-3xl shadow-lg hover:-translate-y-1 transition-all p-8">
 
-            <p className="text-zinc-400 mb-4">
+            <p className="text-[var(--muted)] mb-4">
 
               الطلبات
 
             </p>
 
-            <h2 className="text-white text-5xl font-bold">
+            <h2 className="text-[var(--text)] text-5xl font-black">
 
               {orders.length}
 
@@ -211,15 +211,15 @@ export default function DashboardPage() {
 
           {/* PROFITS */}
 
-          <div className="glass hover-card rounded-3xl p-8 border border-white/10">
+          <div className="bg-white border border-[#E8DDCC] rounded-3xl shadow-lg hover:-translate-y-1 transition-all p-8">
 
-            <p className="text-zinc-400 mb-4">
+            <p className="text-[var(--muted)] mb-4">
 
               الأرباح
 
             </p>
 
-            <h2 className="text-[#C8A96B] text-4xl font-bold">
+            <h2 className="text-[var(--text)] text-4xl font-black">
 
               {totalProfits} EGP
 
@@ -229,15 +229,15 @@ export default function DashboardPage() {
 
           {/* NEW ORDERS */}
 
-          <div className="glass hover-card rounded-3xl p-8 border border-white/10">
+          <div className="bg-white border border-[#E8DDCC] rounded-3xl shadow-lg hover:-translate-y-1 transition-all p-8">
 
-            <p className="text-zinc-400 mb-4">
+            <p className="text-[var(--muted)] mb-4">
 
               طلبات جديدة
 
             </p>
 
-            <h2 className="text-white text-5xl font-bold">
+            <h2 className="text-[var(--text)] text-5xl font-black">
 
               {newOrders.length}
 
@@ -261,20 +261,20 @@ export default function DashboardPage() {
           transition={{
             delay: 0.4,
           }}
-          className="glass rounded-3xl p-8 mb-10"
+          className="bg-white border border-[#E8DDCC] rounded-[32px] p-8 shadow-lg mb-10"
         >
 
           <div className="flex items-center justify-between mb-10">
 
             <div>
 
-              <h2 className="text-4xl font-bold text-white mb-3">
+              <h2 className="text-4xl font-bold text-[var(--text)] mb-3">
 
                 إحصائيات الأرباح
 
               </h2>
 
-              <p className="text-zinc-400">
+              <p className="text-[var(--muted)]">
 
                 متابعة الطلبات والأرباح
 
@@ -307,13 +307,13 @@ export default function DashboardPage() {
 
                     <stop
                       offset="5%"
-                      stopColor="#C8A96B"
+                      stopColor="#C7A86A"
                       stopOpacity={0.8}
                     />
 
                     <stop
                       offset="95%"
-                      stopColor="#C8A96B"
+                      stopColor="#C7A86A"
                       stopOpacity={0}
                     />
 
@@ -331,7 +331,7 @@ export default function DashboardPage() {
                 <Area
                   type="monotone"
                   dataKey="profits"
-                  stroke="#C8A96B"
+                  stroke="#C7A86A"
                   fillOpacity={1}
                   fill="url(#colorProfit)"
                 />
@@ -344,11 +344,11 @@ export default function DashboardPage() {
 
         </motion.div>
 
-        <div className="glass hover-card rounded-3xl p-8 border border-white/10">
+        <div className="bg-white rounded-[32px] p-8 border border-[#E8DDCC] shadow-lg">
 
           <div className="flex items-center justify-between mb-8">
 
-            <h2 className="text-4xl text-white font-bold">
+            <h2 className="text-4xl text-[var(--text)] font-bold">
 
               آخر الطلبات
 
@@ -362,18 +362,18 @@ export default function DashboardPage() {
 
               <div
                 key={order._id}
-                className="bg-black p-6 rounded-2xl flex items-center justify-between"
+                className="bg-[#FAF7F2] border border-[#E8DDCC] p-6 rounded-2xl flex items-center justify-between"
               >
 
                 <div>
 
-                  <h3 className="text-white text-2xl font-bold mb-2">
+                  <h3 className="text-[var(--text)] text-2xl font-bold mb-2">
 
                     {order.customerName}
 
                   </h3>
 
-                  <p className="text-zinc-500">
+                  <p className="text-[var(--muted)]">
 
                     {order.governorate}
 
@@ -383,7 +383,7 @@ export default function DashboardPage() {
 
                 <div>
 
-                  <p className="text-[#C8A96B] text-3xl font-bold">
+                  <p className="text-[var(--primary)] text-3xl font-bold">
 
                     {order.totalPrice} EGP
 
@@ -393,7 +393,7 @@ export default function DashboardPage() {
 
                 <div>
 
-                  <span className="bg-[#C8A96B] text-black px-5 py-2 rounded-xl font-bold">
+                  <span className="bg-[#F5E8C9] text-[#8A7758] px-5 py-2 rounded-xl font-bold">
 
                     {order.status}
 

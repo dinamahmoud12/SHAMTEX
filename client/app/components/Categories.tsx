@@ -47,7 +47,7 @@ export default function Categories() {
 
       {/* LIGHT */}
 
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#C8A96B]/10 blur-[140px] rounded-full" />
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#D4B06A]/10 blur-[140px] rounded-full" />
 
       <div className="max-w-7xl mx-auto relative z-10">
 
@@ -72,7 +72,7 @@ export default function Categories() {
           className="text-center mb-20"
         >
 
-          <p className="text-[#C8A96B] text-xl mb-4 font-semibold">
+          <p className="text-[#D4B06A] text-xl mb-4 font-semibold">
 
             الأقسام
 

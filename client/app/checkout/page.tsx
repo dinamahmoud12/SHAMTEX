@@ -24,7 +24,7 @@ export default function CheckoutPage() {
 
   const {
 
-    cart,
+    cartItems: cart,
 
     totalPrice,
 
@@ -155,7 +155,7 @@ export default function CheckoutPage() {
       try {
 
         await fetch(
-          "http://localhost:5000/api/orders",
+          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/orders`,
           {
 
             method: "POST",
@@ -429,7 +429,7 @@ ${productsText}
 
                 </div>
 
-                <p className="text-[#C8A96B] text-2xl font-black">
+                <p className="text-[#D4B06A] text-2xl font-black">
 
                   {(item.finalPrice ||
                     item.price) *
@@ -487,7 +487,7 @@ ${productsText}
 
               </span>
 
-              <span className="text-[#C8A96B]">
+              <span className="text-[#D4B06A]">
 
                 {finalTotal} EGP
 

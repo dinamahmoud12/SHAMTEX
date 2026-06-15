@@ -47,7 +47,7 @@ export default function EditProductPage() {
     try {
 
       const res = await fetch(
-        `http://localhost:5000/api/products/${params.id}`
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/products/${params.id}`
       );
 
       const data = await res.json();
@@ -85,7 +85,7 @@ export default function EditProductPage() {
     e.preventDefault();
 
     const res = await fetch(
-      `http://localhost:5000/api/products/${params.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/products/${params.id}`,
       {
         method: "PUT",
 
@@ -143,9 +143,9 @@ export default function EditProductPage() {
 
     <section className="bg-black min-h-screen py-20 px-6">
 
-      <div className="max-w-4xl mx-auto bg-zinc-900 p-10 rounded-3xl border border-[#C8A96B]/20">
+      <div className="max-w-4xl mx-auto bg-zinc-900 p-10 rounded-3xl border border-[#D4B06A]/20">
 
-        <h1 className="text-5xl text-[#C8A96B] font-bold mb-12">
+        <h1 className="text-5xl text-[#D4B06A] font-bold mb-12">
 
           تعديل المنتج
 
@@ -214,7 +214,7 @@ export default function EditProductPage() {
 
           </div>
 
-          <div className="bg-black p-5 rounded-2xl border border-[#C8A96B]/20">
+          <div className="bg-black p-5 rounded-2xl border border-[#D4B06A]/20">
 
             <p className="text-zinc-400 mb-2">
 
@@ -222,7 +222,7 @@ export default function EditProductPage() {
 
             </p>
 
-            <h2 className="text-4xl text-[#C8A96B] font-bold">
+            <h2 className="text-4xl text-[#D4B06A] font-bold">
 
               {finalPrice || 0} EGP
 
@@ -276,7 +276,7 @@ export default function EditProductPage() {
           </select>
 
           <button
-            className="w-full bg-[#C8A96B] text-black py-5 rounded-2xl text-2xl font-bold"
+            className="w-full bg-[#D4B06A] text-black py-5 rounded-2xl text-2xl font-bold"
           >
 
             حفظ التعديلات
@@ -292,3 +292,4 @@ export default function EditProductPage() {
   );
 
 }
+

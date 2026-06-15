@@ -54,7 +54,7 @@ export default function DashboardLayout({
     try {
 
       const res = await fetch(
-        "http://localhost:5000/api/auth/verify",
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/auth/verify`,
         {
           credentials: "include",
         }
@@ -91,7 +91,7 @@ export default function DashboardLayout({
     try {
 
       await fetch(
-        "http://localhost:5000/api/auth/logout",
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/auth/logout`,
         {
           method: "POST",
           credentials: "include",
@@ -156,9 +156,9 @@ export default function DashboardLayout({
 
     return (
 
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#F5EFE4] flex items-center justify-center">
 
-        <div className="text-white text-3xl font-bold animate-pulse">
+        <div className="text-[var(--text)] text-3xl font-bold animate-pulse">
 
           جاري التحقق...
 
@@ -172,7 +172,7 @@ export default function DashboardLayout({
 
   return (
 
-    <section className="min-h-screen flex bg-black text-white">
+    <section className="min-h-screen flex bg-[#F5EFE4] text-[var(--text)]">
 
       {/* SIDEBAR */}
 
@@ -192,7 +192,7 @@ export default function DashboardLayout({
           duration: 0.7,
         }}
 
-        className="w-[320px] hidden lg:flex flex-col backdrop-blur-xl bg-white/5 border-r border-white/10 p-8"
+        className="w-[320px] hidden lg:flex flex-col bg-white border-r border-[#E8DDCC] p-8"
       >
 
         {/* LOGO */}
@@ -201,10 +201,10 @@ export default function DashboardLayout({
 
           <div className="flex items-center gap-4">
 
-            <div className="w-16 h-16 rounded-3xl bg-[#C8A96B]/20 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-3xl bg-[#D4B06A]/20 flex items-center justify-center">
 
               <ShieldCheck
-                className="text-[#C8A96B]"
+                className="text-[#D4B06A]"
                 size={34}
               />
 
@@ -212,7 +212,7 @@ export default function DashboardLayout({
 
             <div>
 
-              <h1 className="text-4xl font-black text-[#C8A96B]">
+              <h1 className="text-4xl font-black text-[#D4B06A]">
 
                 Sham Tex
 
@@ -265,9 +265,9 @@ export default function DashboardLayout({
 
                     active
 
-                      ? "bg-[#C8A96B] text-black font-black shadow-2xl"
+                      ? "bg-[#C7A86A] text-white font-black shadow-2xl"
 
-                      : "bg-white/5 text-white hover:bg-white/10"
+                      : "bg-white text-[var(--text)] hover:bg-[#F5EFE4]"
 
                   }
 
@@ -292,7 +292,7 @@ export default function DashboardLayout({
 
           onClick={handleLogout}
 
-          className="mt-10 bg-red-500 hover:bg-red-600 transition-all text-white h-16 rounded-3xl text-xl font-black flex items-center justify-center gap-3"
+          className="mt-10 bg-[#C7A86A] hover:bg-[#B08B47] transition-all text-white h-16 rounded-3xl text-xl font-black flex items-center justify-center gap-3"
         >
 
           <LogOut size={24} />

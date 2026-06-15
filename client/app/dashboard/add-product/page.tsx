@@ -55,7 +55,7 @@ export default function AddProductPage() {
     }
 
     const res = await fetch(
-      "http://localhost:5000/api/products",
+      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/products`,
       {
         method: "POST",
         body: formData,
@@ -76,9 +76,9 @@ export default function AddProductPage() {
 
     <section className="bg-black min-h-screen py-20 px-6">
 
-      <div className="max-w-4xl mx-auto bg-zinc-900 p-10 rounded-3xl border border-[#C8A96B]/20">
+      <div className="max-w-4xl mx-auto bg-white border border-[#E8DDCC] rounded-3xl p-10">
 
-        <h1 className="text-5xl text-[#C8A96B] font-bold mb-12">
+        <h1 className="text-5xl text-[#D4B06A] font-bold mb-12">
           إضافة منتج
         </h1>
 
@@ -92,7 +92,7 @@ export default function AddProductPage() {
             placeholder="اسم المنتج"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-5 rounded-2xl bg-black text-white"
+            className="w-full h-14 px-4 rounded-2xl border border-[#E8DDCC] bg-white text-black"
           />
 
           <div className="grid md:grid-cols-2 gap-5">
@@ -102,7 +102,7 @@ export default function AddProductPage() {
               placeholder="كود الكبير"
               value={bigCode}
               onChange={(e) => setBigCode(e.target.value)}
-              className="w-full p-5 rounded-2xl bg-black text-white"
+              className="w-full h-14 px-4 rounded-2xl border border-[#E8DDCC] bg-white text-black"
             />
 
             <input
@@ -110,7 +110,7 @@ export default function AddProductPage() {
               placeholder="كود الأطفال"
               value={kidsCode}
               onChange={(e) => setKidsCode(e.target.value)}
-              className="w-full p-5 rounded-2xl bg-black text-white"
+              className="w-full h-14 px-4 rounded-2xl border border-[#E8DDCC] bg-white text-black"
             />
 
           </div>
@@ -122,7 +122,7 @@ export default function AddProductPage() {
               placeholder="السعر"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              className="w-full p-5 rounded-2xl bg-black text-white"
+              className="w-full h-14 px-4 rounded-2xl border border-[#E8DDCC] bg-white text-black"
             />
 
             <input
@@ -130,18 +130,18 @@ export default function AddProductPage() {
               placeholder="الخصم %"
               value={discount}
               onChange={(e) => setDiscount(e.target.value)}
-              className="w-full p-5 rounded-2xl bg-black text-white"
+              className="w-full h-14 px-4 rounded-2xl border border-[#E8DDCC] bg-white text-black"
             />
 
           </div>
 
-          <div className="bg-black p-5 rounded-2xl border border-[#C8A96B]/20">
+          <div className="bg-black p-5 rounded-2xl border border-[#D4B06A]/20">
 
             <p className="text-zinc-400 mb-2">
               السعر بعد الخصم
             </p>
 
-            <h2 className="text-4xl text-[#C8A96B] font-bold">
+            <h2 className="text-4xl text-[#D4B06A] font-bold">
               {finalPrice || 0} EGP
             </h2>
 
@@ -151,13 +151,13 @@ export default function AddProductPage() {
             placeholder="وصف المنتج"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-5 rounded-2xl bg-black text-white h-40"
+            className="w-full h-40 px-4 py-4 rounded-2xl border border-[#E8DDCC] bg-white text-black"
           />
 
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-5 rounded-2xl bg-black text-white"
+            className="w-full h-14 px-4 rounded-2xl border border-[#E8DDCC] bg-white text-black"
           >
 
             <option value="">
@@ -186,19 +186,19 @@ export default function AddProductPage() {
 
           </select>
 
-          <div className="bg-black p-6 rounded-2xl border border-dashed border-[#C8A96B]">
+          <div className="bg-white p-6 rounded-2xl border border-[#E8DDCC]">
 
             <input
               type="file"
               multiple
               onChange={(e) => setImages(e.target.files)}
-              className="text-white"
+              className="w-full text-black"
             />
 
           </div>
 
           <button
-            className="w-full bg-[#C8A96B] text-black py-5 rounded-2xl text-2xl font-bold hover:scale-105 transition"
+            className="w-full bg-[#D4B06A] text-black py-5 rounded-2xl text-2xl font-bold hover:scale-105 transition"
           >
             إضافة المنتج
           </button>

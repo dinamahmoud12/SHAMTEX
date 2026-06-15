@@ -7,13 +7,13 @@ const cinzel = Cinzel({ subsets: ["latin"] });
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden px-6 pt-24">
+    <section className="relative min-h-screen flex items-center overflow-hidden px-6 pt-24 bg-[var(--bg)] text-[var(--text)]">
 
       {/* GOLD LIGHTS */}
 
-      <div className="absolute top-0 left-0 w-[700px] h-[700px] bg-[#C8A96B]/20 blur-[180px] rounded-full" />
+      <div className="absolute top-0 left-0 w-[700px] h-[700px] bg-[var(--primary)]/15 blur-[180px] rounded-full" />
 
-      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-white/10 blur-[180px] rounded-full" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[var(--secondary)]/10 blur-[180px] rounded-full" />
 
       <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
 
@@ -42,10 +42,10 @@ export default function Hero() {
               px-6
               py-3
               rounded-full
-              bg-[#C8A96B]/10
+              bg-[var(--primary)]/10
               border
-              border-[#C8A96B]/30
-              text-[#C8A96B]
+              border-[var(--primary)]/30
+              text-[var(--primary)]
               font-bold
               tracking-widest
               mb-8
@@ -67,11 +67,11 @@ export default function Hero() {
               tracking-[0.15em]
             `}
           >
-            <span className="text-white">
+            <span className="text-[var(--text)]">
               Sham
             </span>
 
-            <span className="text-[#C8A96B]">
+            <span className="text-[var(--primary)]">
               {" "}Tex
             </span>
           </h1>
@@ -80,7 +80,7 @@ export default function Hero() {
 
           <p
             className="
-              text-zinc-400
+              text-[var(--muted)]
               text-xl
               lg:text-2xl
               leading-loose
@@ -103,7 +103,7 @@ export default function Hero() {
                 px-10
                 h-16
                 rounded-2xl
-                bg-[#C8A96B]
+                bg-[var(--primary)]
                 text-black
                 font-black
                 flex
@@ -112,7 +112,7 @@ export default function Hero() {
                 hover:scale-105
                 transition-all
                 duration-300
-                shadow-2xl
+                shadow-[0_10px_40px_rgba(199,168,106,.35)]
               "
             >
               تسوق الآن
@@ -125,12 +125,13 @@ export default function Hero() {
                 h-16
                 rounded-2xl
                 border
-                border-white/10
-                text-white
+                border-[var(--secondary)]/30
+                text-[var(--text)]
+                bg-[var(--card)]
                 flex
                 items-center
                 justify-center
-                hover:bg-white/5
+                hover:bg-[var(--bg)]
                 transition-all
                 duration-300
               "
@@ -243,7 +244,7 @@ export default function Hero() {
 
           {/* GLOW */}
 
-          <div className="absolute inset-0 bg-[#C8A96B]/5 blur-3xl -z-10 rounded-full" />
+          <div className="absolute inset-0 bg-[var(--primary)]/10 blur-3xl -z-10 rounded-full" />
 
         </motion.div>
 

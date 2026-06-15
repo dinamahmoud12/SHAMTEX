@@ -60,7 +60,7 @@ export default function OrdersPage() {
       try {
 
         const res = await fetch(
-          "http://localhost:5000/api/orders"
+          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/orders`
         );
 
         const data =
@@ -89,7 +89,7 @@ export default function OrdersPage() {
       try {
 
         await fetch(
-          `http://localhost:5000/api/orders/${id}`,
+          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/orders/${id}`,
           {
 
             method: "PUT",
@@ -139,7 +139,7 @@ export default function OrdersPage() {
       try {
 
         await fetch(
-          `http://localhost:5000/api/orders/${id}`,
+          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/orders/${id}`,
           {
             method: "DELETE",
           }
@@ -267,13 +267,13 @@ export default function OrdersPage() {
 
         <div className="mb-14">
 
-          <h1 className="text-6xl font-black text-white mb-4">
+          <h1 className="text-6xl font-black text-[var(--text)] mb-4">
 
             إدارة الطلبات
 
           </h1>
 
-          <p className="text-zinc-400 text-xl">
+          <p className="text-[var(--muted)] text-xl">
 
             متابعة وإدارة جميع طلبات العملاء
 
@@ -314,15 +314,15 @@ export default function OrdersPage() {
                     index * 0.1,
                 }}
 
-                className="glass rounded-[32px] p-8 border border-white/10"
+                className="glass-card p-8"
               >
 
                 <div className="flex items-center justify-between mb-6">
 
-                  <div className="w-16 h-16 rounded-2xl bg-[#C8A96B]/20 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-2xl bg-[#D4B06A]/20 flex items-center justify-center">
 
                     <Icon
-                      className="text-[#C8A96B]"
+                      className="text-[#D4B06A]"
                       size={32}
                     />
 
@@ -330,13 +330,13 @@ export default function OrdersPage() {
 
                 </div>
 
-                <h3 className="text-zinc-400 text-lg mb-3">
+                <h3 className="text-[var(--muted)] text-lg mb-3">
 
                   {stat.title}
 
                 </h3>
 
-                <p className="text-white text-4xl font-black">
+                <p className="text-[var(--primary)] text-4xl font-black">
 
                   {stat.value}
 
@@ -364,277 +364,89 @@ export default function OrdersPage() {
 
         {/* ORDERS */}
 
-        <div className="space-y-8">
+        <div className="glass-card rounded-3xl border border-[#E8DDCC] p-6">
 
-          {orders.map((
-            order,
-            index
-          ) => (
+          <div className="space-y-6">
 
-            <motion.div
+            {orders.map((order) => {
 
-              key={order._id}
+              const status = order.status || "جديد";
 
-              initial={{
-                opacity: 0,
-                y: 50,
-              }}
+              const getStatusClasses = (s: string) => {
+                switch (s) {
+                  case "جديد":
+                    return "bg-amber-100 text-amber-700";
+                  case "تم الشحن":
+                    return "bg-blue-100 text-blue-700";
+                  case "تم التسليم":
+                    return "bg-green-100 text-green-700";
+                  case "ملغي":
+                    return "bg-red-100 text-red-700";
+                  default:
+                    return "bg-[#F5E8C9] text-[#8A7758]";
+                }
+              };
 
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
+              return (
 
-              transition={{
-                delay:
-                  index * 0.05,
-              }}
+                <div key={order._id} className="glass-card rounded-3xl border border-[#E8DDCC] p-6">
 
-              className="glass rounded-[40px] p-8 border border-white/10"
-            >
+                  <div className="flex items-center justify-between mb-4">
 
-              {/* TOP */}
+                    <div>
 
-              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-8 mb-10">
+                      <h3 className="text-2xl font-black text-[var(--text)]">{order.customerName}</h3>
 
-                {/* CUSTOMER */}
-
-                <div>
-
-                  <h2 className="text-4xl font-black text-white mb-5">
-
-                    {order.customerName}
-
-                  </h2>
-
-                  <div className="space-y-3">
-
-                    <div className="flex items-center gap-3 text-zinc-400">
-
-                      <Phone size={18} />
-
-                      <span>
-
-                        {order.phone}
-
-                      </span>
+                      <p className="text-[var(--muted)]">{order.city}</p>
 
                     </div>
 
-                    <div className="flex items-center gap-3 text-zinc-400">
+                    <div className="text-right">
 
-                      <MapPin size={18} />
+                      <p className="text-[var(--primary)] text-3xl font-bold">{order.totalPrice} EGP</p>
 
-                      <span>
-
-                        {order.city}
-
-                      </span>
+                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ${getStatusClasses(status)}`}>{status}</span>
 
                     </div>
 
                   </div>
 
-                </div>
+                  <div className="flex items-center gap-4">
 
-                {/* TOTAL */}
+                    <select
 
-                <div>
+                      value={order.status}
 
-                  <p className="text-zinc-400 mb-3">
+                      onChange={(e) => updateStatus(order._id, e.target.value)}
 
-                    إجمالي الطلب
+                      className="w-64 h-11 rounded-2xl border border-[#E8DDCC] bg-white px-3 text-sm text-[var(--text)] outline-none"
+                    >
 
-                  </p>
+                      <option value="جديد">جديد</option>
 
-                  <h3 className="text-[#C8A96B] text-5xl font-black">
+                      <option value="جاري التجهيز">جاري التجهيز</option>
 
-                    {order.totalPrice} EGP
+                      <option value="تم الشحن">تم الشحن</option>
 
-                  </h3>
+                      <option value="تم التسليم">تم التسليم</option>
 
-                </div>
+                      <option value="ملغي">ملغي</option>
 
-                {/* STATUS */}
+                    </select>
 
-                <div className="w-full xl:w-[280px]">
-
-                  <p className="text-zinc-400 mb-4">
-
-                    حالة الطلب
-
-                  </p>
-
-                  <select
-
-                    value={order.status}
-
-                    onChange={(e) =>
-                      updateStatus(
-                        order._id,
-                        e.target.value
-                      )
-                    }
-
-                    className="w-full h-16 rounded-2xl bg-black/30 border border-white/10 px-5 text-white outline-none"
-                  >
-
-                    <option value="جديد">
-
-                      جديد
-
-                    </option>
-
-                    <option value="جاري التجهيز">
-
-                      جاري التجهيز
-
-                    </option>
-
-                    <option value="تم الشحن">
-
-                      تم الشحن
-
-                    </option>
-
-                    <option value="تم التسليم">
-
-                      تم التسليم
-
-                    </option>
-
-                  </select>
-
-                </div>
-
-              </div>
-
-              {/* PRODUCTS */}
-
-              <div>
-
-                <h3 className="text-2xl font-bold text-white mb-6">
-
-                  المنتجات
-
-                </h3>
-
-                <div className="space-y-5">
-
-                  {order.products?.map(
-                    (
-                      item: any,
-                      idx: number
-                    ) => (
-
-                      <div
-
-                        key={idx}
-
-                        className="bg-black/20 rounded-3xl p-5 flex items-center gap-5"
-                      >
-
-                        <img
-
-                          src={
-                            item.images?.[0]
-                          }
-
-                          className="w-24 h-24 rounded-2xl object-cover"
-                        />
-
-                        <div className="flex-1">
-
-                          <h4 className="text-white text-2xl font-bold mb-2">
-
-                            {item.title}
-
-                          </h4>
-
-                          <p className="text-zinc-400">
-
-                            الكمية:
-                            {item.quantity}
-
-                          </p>
-
-                        </div>
-
-                        <p className="text-[#C8A96B] text-3xl font-black">
-
-                          {(item.finalPrice ||
-                            item.price) *
-                            item.quantity} EGP
-
-                        </p>
-
-                      </div>
-
-                    )
-                  )}
-
-                </div>
-
-              </div>
-
-              {/* FOOTER */}
-
-              <div className="mt-10 pt-8 border-t border-white/10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-
-                <div>
-
-                  <p className="text-zinc-400 mb-2">
-
-                    العنوان
-
-                  </p>
-
-                  <p className="text-white text-lg leading-loose">
-
-                    {order.address}
-
-                  </p>
-
-                </div>
-
-                <div className="flex items-center gap-4">
-
-                  <div className="glass px-6 py-4 rounded-2xl flex items-center gap-3 text-white">
-
-                    <Clock3
-                      size={20}
-                    />
-
-                    {order.status}
+                    <button onClick={() => deleteOrder(order._id)} className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">حذف</button>
 
                   </div>
 
-                  <button
-
-                    onClick={() =>
-                      deleteOrder(
-                        order._id
-                      )
-                    }
-
-                    className="w-14 h-14 rounded-2xl bg-red-500/20 text-red-400 flex items-center justify-center"
-                  >
-
-                    <Trash2 />
-
-                  </button>
-
                 </div>
 
-              </div>
+              );
 
-            </motion.div>
+            })}
 
-          ))}
+          </div>
 
         </div>
-
-        {/* EMPTY */}
 
         {!loading &&
           orders.length === 0 && (

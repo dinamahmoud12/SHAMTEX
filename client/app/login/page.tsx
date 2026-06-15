@@ -60,9 +60,7 @@ export default function LoginPage() {
 
         const res =
           await fetch(
-
-            "http://localhost:5000/api/auth/login",
-
+            `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/auth/login`,
             {
 
               method:
@@ -133,7 +131,7 @@ export default function LoginPage() {
 
       <div className="absolute inset-0 opacity-20">
 
-        <div className="absolute top-20 left-20 w-96 h-96 bg-[#C8A96B] rounded-full blur-[180px]" />
+        <div className="absolute top-20 left-20 w-96 h-96 bg-[#D4B06A] rounded-full blur-[180px]" />
 
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500 rounded-full blur-[180px]" />
 
@@ -162,10 +160,10 @@ export default function LoginPage() {
 
         {/* ICON */}
 
-        <div className="w-28 h-28 rounded-[32px] bg-[#C8A96B]/20 flex items-center justify-center mx-auto mb-8">
+        <div className="w-28 h-28 rounded-[32px] bg-[#D4B06A]/20 flex items-center justify-center mx-auto mb-8">
 
           <ShieldCheck
-            className="text-[#C8A96B]"
+            className="text-[#D4B06A]"
             size={60}
           />
 
@@ -283,7 +281,7 @@ export default function LoginPage() {
 
           </p>
 
-          <p className="text-[#C8A96B] font-bold mt-2">
+          <p className="text-[#D4B06A] font-bold mt-2">
 
             123456
 

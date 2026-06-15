@@ -16,15 +16,15 @@ export default function Home() {
 
   return (
 
-    <main className="min-h-screen overflow-hidden bg-transparent">
+    <main className="min-h-screen overflow-hidden bg-[var(--bg)]">
 
       {/* BACKGROUND EFFECT */}
 
       <div className="fixed inset-0 -z-10">
 
-        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#C8A96B]/20 blur-[120px] rounded-full" />
+        <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-[var(--primary)]/10 blur-[200px] rounded-full" />
 
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-white/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[var(--secondary)]/10 blur-[180px] rounded-full" />
 
       </div>
 
@@ -115,9 +115,9 @@ export default function Home() {
 
       {/* FLOATING LIGHT */}
 
-      <div className="fixed top-1/3 left-10 w-72 h-72 bg-[#C8A96B]/10 rounded-full blur-[100px] pointer-events-none float" />
+      <div className="fixed top-1/3 left-10 w-72 h-72 bg-[var(--primary)]/10 rounded-full blur-[100px] pointer-events-none float" />
 
-      <div className="fixed bottom-20 right-10 w-72 h-72 bg-white/10 rounded-full blur-[100px] pointer-events-none float" />
+      <div className="fixed bottom-20 right-10 w-72 h-72 bg-[var(--secondary)]/10 rounded-full blur-[100px] pointer-events-none float" />
 
     </main>
 

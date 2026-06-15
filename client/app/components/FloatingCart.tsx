@@ -1,39 +1,21 @@
 "use client";
 
 import {
-
   motion,
-
   AnimatePresence,
-
 } from "framer-motion";
 
 import {
-
   ShoppingBag,
-
   X,
-
   Plus,
-
   Minus,
-
   Trash2,
-
 } from "lucide-react";
 
-import {
-
-  useState,
-
-} from "react";
-
-import {
-
-  useCart,
-
-} from "../context/CartContext";
-
+import { useState } from "react";
+import Image from "next/image";
+import { useCart } from "../context/CartContext";
 import Link from "next/link";
 
 export default function FloatingCart() {
@@ -43,19 +25,12 @@ export default function FloatingCart() {
     useState(false);
 
   const {
-
-    cart,
-
+    cartItems,
     totalItems,
-
     totalPrice,
-
     removeFromCart,
-
-    increaseQuantity,
-
-    decreaseQuantity,
-
+    increaseQty,
+    decreaseQty,
   } = useCart();
 
   return (
@@ -179,7 +154,7 @@ export default function FloatingCart() {
 
               {/* EMPTY */}
 
-              {cart.length === 0 && (
+              {cartItems.length === 0 && (
 
                 <div className="h-[70vh] flex items-center justify-center text-zinc-400 text-xl">
 
@@ -193,21 +168,24 @@ export default function FloatingCart() {
 
               <div className="space-y-6">
 
-                {cart.map((item) => (
+                {cartItems.map((item) => (
 
                   <div
 
-                    key={item._id}
+                    key={`${item._id}-${item.size || "default"}`}
 
                     className="glass rounded-3xl p-5 flex gap-5"
                   >
 
-                    <img
-
-                      src={item.images?.[0]}
-
-                      className="w-28 h-28 rounded-2xl object-cover"
-                    />
+                    <div className="relative w-28 h-28 rounded-2xl overflow-hidden">
+                      <Image
+                        src={item.images?.[0] || "/hero-1.webp"}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </div>
 
                     <div className="flex-1">
 
@@ -217,10 +195,15 @@ export default function FloatingCart() {
 
                       </h3>
 
-                      <p className="text-[#C8A96B] text-2xl font-black mb-4">
+                      {item.size && (
+                        <p className="text-zinc-400 mb-2">
+                          المقاس: {item.size}
+                        </p>
+                      )}
 
-                        {(item.finalPrice ||
-                          item.price) *
+                      <p className="text-[#D4B06A] text-2xl font-black mb-4">
+
+                        {(item.finalPrice || item.price) *
                           (item.quantity || 1)} EGP
 
                       </p>
@@ -232,8 +215,9 @@ export default function FloatingCart() {
                         <button
 
                           onClick={() =>
-                            decreaseQuantity(
-                              item._id
+                            decreaseQty(
+                              item._id,
+                              item.size
                             )
                           }
 
@@ -253,8 +237,9 @@ export default function FloatingCart() {
                         <button
 
                           onClick={() =>
-                            increaseQuantity(
-                              item._id
+                            increaseQty(
+                              item._id,
+                              item.size
                             )
                           }
 
@@ -269,7 +254,8 @@ export default function FloatingCart() {
 
                           onClick={() =>
                             removeFromCart(
-                              item._id
+                              item._id,
+                              item.size
                             )
                           }
 
@@ -292,7 +278,7 @@ export default function FloatingCart() {
 
               {/* FOOTER */}
 
-              {cart.length > 0 && (
+              {cartItems.length > 0 && (
 
                 <div className="mt-10 pt-8 border-t border-white/10">
 
@@ -304,7 +290,7 @@ export default function FloatingCart() {
 
                     </p>
 
-                    <h3 className="text-[#C8A96B] text-4xl font-black">
+                    <h3 className="text-[#D4B06A] text-4xl font-black">
 
                       {totalPrice} EGP
 
